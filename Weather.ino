@@ -24,7 +24,7 @@ const int pwmLedChannelTFT = 0;
 
 const char* ssid     = "mynetwork";       ///EDIIIT
 const char* password = "mypassword"; //EDI8IT
-String town="Opwierde";              //EDDIT
+String town="Amsterdam";              //EDDIT
 String Country="NL";                //EDDIT
 const String endpoint = "http://api.openweathermap.org/data/2.5/weather?q="+town+","+Country+"&units=metric&APPID=";
 const String key = "af666dxxxxxxx425be01e4bxxxxx"; /*EDDITTTTTTTTTTTTTTTTTTTTTTTT                      */
