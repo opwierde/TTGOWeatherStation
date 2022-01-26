@@ -5,7 +5,6 @@
 #include <TFT_eSPI.h> // Hardware-specific library
 #include <ArduinoJson.h>          //https://github.com/bblanchon/ArduinoJson.git
 #include <NTPClient.h>           //https://github.com/taranais/NTPClient
-
 TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 
 #define TFT_GREY 0x5AEB
@@ -23,16 +22,16 @@ const int pwmResolution = 8;
 const int pwmLedChannelTFT = 0;
 
 
-const char* ssid     = "IGKx20";       ///EDIIIT
-const char* password = "1804672019"; //EDI8IT
-String town="Paris";              //EDDIT
-String Country="FR";                //EDDIT
+const char* ssid     = "Opwierde II";       ///EDIIIT
+const char* password = "2landrover"; //EDI8IT
+String town="Opwierde";              //EDDIT
+String Country="NL";                //EDDIT
 const String endpoint = "http://api.openweathermap.org/data/2.5/weather?q="+town+","+Country+"&units=metric&APPID=";
-const String key = "d0d0bf1bb7xxxx2e5dce67c95f4fd0800"; /*EDDITTTTTTTTTTTTTTTTTTTTTTTT                      */
+const String key = "af666db9c18a64a3e425be01e4b5c4b3"; /*EDDITTTTTTTTTTTTTTTTTTTTTTTT                      */
 
 String payload=""; //whole json 
- String tmp="" ; //temperatur
-  String hum="" ; //humidity
+String tmp="" ; //temperatur
+String hum="" ; //humidity
   
 
 StaticJsonDocument<1000> doc;
@@ -42,12 +41,16 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
 
 // Variables to save date and time
+
 String formattedDate;
 String dayStamp;
 String timeStamp;
+int  pensionDate = 1735599600; //new pension 31-12-2024 in epoch secconds
+int deltaDate; //new
+int epochDate; //new
 
 int backlight[5] = {10,30,60,120,220};
-byte b=1;
+byte b=4;
 
 void setup(void) {
    pinMode(0,INPUT_PULLUP);
@@ -100,9 +103,8 @@ void setup(void) {
           tft.println("HUM: ");
           tft.setTextColor(TFT_WHITE,TFT_BLACK);
 
-            tft.setFreeFont(&Orbitron_Medium_20);
-            tft.setCursor(6, 82);
-           tft.println(town);
+         
+        
 
            tft.fillRect(68,152,1,74,TFT_GREY);
 
@@ -130,18 +132,20 @@ int press2=0;////
 int frame=0;
 String curSeconds="";
 
+// End of the one-time setup
+
 void loop() {
 
   
   
-
+// Next frame of the animation
   tft.pushImage(0, 88,  135, 65, ani[frame]);
    frame++;
    if(frame>=10)
    frame=0;
   
  
-
+// Brightness button
    if(digitalRead(35)==0){
    if(press2==0)
    {press2=1;
@@ -155,6 +159,8 @@ void loop() {
    tft.fillRect(78+(i*7),216,3,10,blue);
    ledcWrite(pwmLedChannelTFT, backlight[b]);}
    }else press2=0;
+
+// Inverse screen button
 
    if(digitalRead(0)==0){
    if(press1==0)
@@ -188,10 +194,19 @@ void loop() {
   // The formattedDate comes with the following format:
   // 2018-05-28T16:00:13Z
   // We need to extract date and time
+  epochDate = timeClient.getEpochTime();
   formattedDate = timeClient.getFormattedDate();
-  Serial.println(formattedDate);
+  deltaDate = (pensionDate - epochDate) / (3600 * 24); //new
+  //Serial.println(deltaDate); //new
 
  
+    tft.setFreeFont(&Orbitron_Medium_20);
+           tft.setCursor(6, 82);
+           tft.println(deltaDate); //new
+           tft.setCursor(63, 69); //new
+           tft.setTextFont(2); //new
+           tft.println(" dagen"); //new
+           
   int splitT = formattedDate.indexOf("T");
   dayStamp = formattedDate.substring(0, splitT);
  
@@ -212,7 +227,7 @@ void loop() {
          {
           tft.fillRect(3,8,120,30,TFT_BLACK);
           tft.setCursor(5, 34);
-          tft.println(timeStamp.substring(0,5));
+          tft.println(timeStamp.substring(0,5)); // time
           tt=timeStamp.substring(0,5);
          }
   
@@ -255,9 +270,10 @@ void getData()
   tmp=tmp2;
   hum=hum2;
   
-   Serial.println("Temperature"+String(tmp));
-   Serial.println("Humidity"+hum);
-   Serial.println(town);
+   Serial.println("Temperature "+String(tmp));
+   Serial.println("Humidity "+hum);
+   Serial.println(deltaDate);
+
    
  }
          
