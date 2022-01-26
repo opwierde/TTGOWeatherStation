@@ -1,4 +1,4 @@
-
+o
 //
 #include "ani.h"
 #include <SPI.h>
@@ -22,12 +22,12 @@ const int pwmResolution = 8;
 const int pwmLedChannelTFT = 0;
 
 
-const char* ssid     = "Opwierde II";       ///EDIIIT
-const char* password = "2landrover"; //EDI8IT
+const char* ssid     = "mynetwork";       ///EDIIIT
+const char* password = "mypassword"; //EDI8IT
 String town="Opwierde";              //EDDIT
 String Country="NL";                //EDDIT
 const String endpoint = "http://api.openweathermap.org/data/2.5/weather?q="+town+","+Country+"&units=metric&APPID=";
-const String key = "af666db9c18a64a3e425be01e4b5c4b3"; /*EDDITTTTTTTTTTTTTTTTTTTTTTTT                      */
+const String key = "af666dxxxxxxx425be01e4bxxxxx"; /*EDDITTTTTTTTTTTTTTTTTTTTTTTT                      */
 
 String payload=""; //whole json 
 String tmp="" ; //temperatur
